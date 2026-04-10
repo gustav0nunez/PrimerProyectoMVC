@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Dominio.Cliente>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Listado de Clientes</h1>
+
+    <a asp-action="Crear" class="btn btn-success">
+        Crear Nuevo Cliente
+    </a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Dirección</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Nombre</td>
+                <td>@c.Email</td>
+                <td>@c.Direccion</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Detalles" asp-route-id="@c.Id" class="btn btn-info btn-sm">
+                            Detalle
+                        </a>
+
+                        <a asp-action="Editar" asp-route-id="@c.Id" class="btn btn-warning btn-sm">
+                            Editar 
+                        </a>
+
+                        <form asp-action="Eliminar" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@c.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('¿Estás seguro de que deseas eliminar a @c.Nombre?')">
+                                Eliminar 
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
