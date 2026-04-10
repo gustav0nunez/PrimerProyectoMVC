@@ -34,22 +34,6 @@ namespace Dominio
         {
             if (c == null) throw new Exception("El objeto cliente no puede ser nulo");
 
-            if (string.IsNullOrEmpty(c.Nombre))
-            {
-                throw new Exception("El nombre es obligatorio");
-            }
-
-            if (string.IsNullOrEmpty(c.Direccion))
-            {
-                throw new Exception("La dirección es obligatoria");
-            }
-
-            if (c.FechaNacimiento == null)
-            {
-                throw new Exception("La fecha es obligatoria");
-            }
-
-
             Cliente existente = Mapper.ObtenerClientePorMail(c.Email);   
 
             if (existente != null)

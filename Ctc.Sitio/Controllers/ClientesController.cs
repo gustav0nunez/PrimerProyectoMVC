@@ -35,7 +35,7 @@ namespace Ctc.Sitio.Controllers
             catch (Exception ex)
             {
 
-                ViewBag.MensajeError = ex.Message;
+                ModelState.AddModelError("Email", ex.Message);
                 return View(nuevoCliente);
             }
         }
