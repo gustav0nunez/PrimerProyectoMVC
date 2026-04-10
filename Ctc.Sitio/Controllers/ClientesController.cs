@@ -8,7 +8,7 @@ namespace Ctc.Sitio.Controllers
         public IActionResult Index()
         {
             var lista = ClienteService.Instancia.TraerTodos();
-            return View(lista); 
+            return View(lista);
         }
 
         [HttpGet]
@@ -22,19 +22,19 @@ namespace Ctc.Sitio.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(nuevoCliente); 
+                return View(nuevoCliente);
             }
             try
             {
-                
+
                 ClienteService.Instancia.GuardarCliente(nuevoCliente);
 
-                
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                
+
                 ViewBag.MensajeError = ex.Message;
                 return View(nuevoCliente);
             }
@@ -49,7 +49,7 @@ namespace Ctc.Sitio.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 TempData["Error"] = "No se pudo eliminar: " + ex.Message;
             }
 
@@ -65,19 +65,19 @@ namespace Ctc.Sitio.Controllers
                 return RedirectToAction("Index");
             }
 
-            
+
             return View(encontrado);
         }
 
         [HttpGet]
         public IActionResult Editar(int id)
         {
-            
+
             var cliente = ClienteService.Instancia.ObtenerPorId(id);
 
             if (cliente == null) return RedirectToAction("Index");
 
-            
+
             return View(cliente);
         }
 
