@@ -93,7 +93,7 @@ namespace Ctc.Sitio.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+                ModelState.AddModelError(string.Empty, ex.Message);
                 return View(clienteActualizado);
             }
         }

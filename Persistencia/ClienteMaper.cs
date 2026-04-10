@@ -7,20 +7,20 @@ namespace Persistencia
 {
     public class ClienteMaper : IClienteMap
     {
-       static string strcon = @"Server=.\SQLEXPRESS01;Initial Catalog=PracticosBD2;Integrated Security=true;TrustServerCertificate=true;Connect Timeout=60";
+        static string strcon = @"Server=.\SQLEXPRESS01;Initial Catalog=PracticosBD2;Integrated Security=true;TrustServerCertificate=true;Connect Timeout=60";
+
 
 
         private Cliente MapearCliente(SqlDataReader reader)
         {
-            Cliente c = new Cliente();
-
-            c.Id = Convert.ToInt32(reader["id_cliente"]); ;
-            c.Nombre = reader["nombre_completo"].ToString();
-            c.Email = reader["email"].ToString();
-            c.Direccion = reader["dirección"].ToString();
-            c.FechaNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"]);
-            return c;
-
+            return new Cliente
+            {
+                Id = (int)reader["id_cliente"],
+                Nombre = reader["nombre_completo"].ToString(),
+                Email = reader["email"].ToString(),
+                Direccion = reader["dirección"].ToString(),
+                FechaNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"])
+            };
         }
 
         public void Modificar(Cliente c)
@@ -113,10 +113,6 @@ namespace Persistencia
             }
         }
 
-
-
-
-
         public Cliente ObtenerPorId(int id)
         {
            
@@ -151,48 +147,43 @@ namespace Persistencia
 
             return encontrado;
         }
-        
-
         public List<Cliente> ObtenerTodos()
         {
-          
             List<Cliente> lista = new List<Cliente>();
-            Cliente clientesAListar = null;
-            //1- CONEXION: SQLCONNECTION
-            SqlConnection conn = new SqlConnection(strcon);
-            try
+
+            // 1- CONEXION: El 'using' asegura que se cierre SI o SI al terminar
+            using (SqlConnection conn = new SqlConnection(strcon))
             {
-                //2- ABRIR CONEXION
-                conn.Open();
-                //3- COMANDO: SQLCOMMAND
-                var cmd = new SqlCommand("SELECT * FROM Cliente", conn);
-                //4- EJECUTAR SENTENCIA
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    clientesAListar = MapearCliente(reader);
+                    // 2- ABRIR CONEXION
+                    conn.Open();
 
-                    lista.Add(clientesAListar);
+                    // 3- COMANDO
+                    string sql = "SELECT id_cliente, nombre_completo, email, dirección, fecha_nacimiento FROM Cliente";
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+
+                    // 4- EJECUTAR Y PROCESAR: El reader también necesita su 'using'
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Usamos el mapeador pro
+                            Cliente c = MapearCliente(reader);
+                            lista.Add(c);
+                        }
+                    } // Aquí se libera el Reader inmediatamente
                 }
-                reader.Close();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                if (conn != null && conn.State == ConnectionState.Open)
+                catch (Exception ex)
                 {
-                    //CERRAR CONEXION
-                    conn.Close();
+                    // Relanzamos para que la capa Web sepa qué pasó
+                    throw new Exception("Error en la base de datos: " + ex.Message);
                 }
+            } // Aquí la conexión se cierra automáticamente. ¡Se acabaron los bloqueos!
 
-            }
             return lista;
         }
-        
+
 
         public void Guardar(Cliente c)
         {
