@@ -3,21 +3,53 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ctc.Sitio.Controllers
 {
-    public class PedidoController : Controller
+    public class PedidosController : Controller
     {
-        public IActionResult Index()
+       
+            public IActionResult Index()
         {
-            return View();
+           
+            var listaPedidos = PedidoService.Instancia.ObtenerTodos();
+            return View(listaPedidos);
         }
+        
 
         [HttpGet]
         public IActionResult Crear()
         {
             
-            var clientes = ClienteService.Instancia.TraerTodos();
-            ViewBag.Clientes = clientes;
+            List<Cliente>clientes = ClienteService.Instancia.TraerTodos();
+            ViewBag.ListadoClientes = clientes;
+            return View();  
+        }
 
-            return View();
+       
+        [HttpPost]
+        public IActionResult Crear(Pedido p)
+        {
+            
+            if (!ModelState.IsValid)
+            {
+                
+                ViewBag.Clientes = ClienteService.Instancia.TraerTodos();
+                return View(p);
+            }
+
+            try
+            {
+            
+                PedidoService.Instancia.GuardarPedido(p);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                
+                ModelState.AddModelError(string.Empty, ex.Message);
+
+                
+                ViewBag.Clientes = ClienteService.Instancia.TraerTodos();
+                return View(p);
+            }
         }
     }
 }

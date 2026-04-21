@@ -8,7 +8,9 @@ namespace Dominio
 {
     public interface IPedidoMap
     {
-        List<Pedido> ObtenerTodos();
         void Guardar(Pedido p);
+        List<Pedido> ObtenerTodos();
+        Pedido ObtenerPorId(int id);
+        void Eliminar(int id);
     }
 }

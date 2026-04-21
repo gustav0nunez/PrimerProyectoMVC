@@ -23,14 +23,32 @@ namespace Dominio
             }
         }
 
+        
         public void GuardarPedido(Pedido p)
         {
-            
             if (p.Total <= 0) throw new Exception("El total debe ser mayor a cero");
-
-            p.Fecha = DateTime.Now; 
-
+            p.Fecha = DateTime.Now;
             Mapper.Guardar(p);
         }
+
+       
+        public List<Pedido> ObtenerTodos()
+        {
+            return Mapper.ObtenerTodos();
+        }
+
+       
+        public Pedido ObtenerPorId(int id)
+        {
+            if (id <= 0) throw new Exception("ID de pedido inválido.");
+            return Mapper.ObtenerPorId(id);
+        }
+
+      
+        public void Eliminar(int id)
+        {
+            if (id <= 0) throw new Exception("ID de pedido inválido.");
+            Mapper.Eliminar(id);
+        }
     }
-    }
+}
