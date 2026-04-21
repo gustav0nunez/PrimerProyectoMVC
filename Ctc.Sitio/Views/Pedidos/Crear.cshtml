@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model Dominio.Pedido
+
+<h2>Crear Nuevo Pedido</h2>
+
+<form asp-action="Crear" method="post">
+    <div class="mb-3">
+        <label class="form-label">Seleccionar Cliente</label>
+        <select asp-for="IdCliente" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Clientes, "Id", "Nombre"))">
+            <option value="">-- Seleccione un cliente --</option>
+        </select>
+        <span asp-validation-for="IdCliente" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Total" class="form-label"></label>
+        <input asp-for="Total" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Total" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Estado" class="form-label"></label>
+        <select asp-for="Estado" class="form-select">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Enviado">Enviado</option>
+            <option value="Entregado">Entregado</option>
+        </select>
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Guardar Pedido</button>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

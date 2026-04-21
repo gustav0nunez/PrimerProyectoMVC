@@ -25,16 +25,12 @@ namespace Dominio
 
         public void GuardarPedido(Pedido p)
         {
-            if (p == null) throw new Exception("El objeto Pedido no puede ser nulo");
+            
+            if (p.Total <= 0) throw new Exception("El total debe ser mayor a cero");
 
-            Cliente existente = Mapper.ObtenerClientePorMail(c.Email);
+            p.Fecha = DateTime.Now; 
 
-            if (existente != null)
-            {
-                throw new Exception("Ya existe un cliente registrado con ese email");
-
-            }
-            Mapper.Guardar(c);
+            Mapper.Guardar(p);
         }
     }
-}
+    }

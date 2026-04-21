@@ -38,7 +38,7 @@ namespace Dominio
 
             if (existente != null)
             {
-                throw new Exception("Ya existe un cliente registrado con ese email");
+                throw new Exception("Ya existe un pedido registrado con ese email");
              
             }
             Mapper.Guardar(c);

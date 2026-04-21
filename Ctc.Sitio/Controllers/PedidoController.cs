@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dominio;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ctc.Sitio.Controllers
 {
@@ -6,6 +7,16 @@ namespace Ctc.Sitio.Controllers
     {
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Crear()
+        {
+            
+            var clientes = ClienteService.Instancia.TraerTodos();
+            ViewBag.Clientes = clientes;
+
             return View();
         }
     }

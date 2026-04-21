@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+builder.Services.AddScoped<IClienteMap, ClienteMaper>();
+builder.Services.AddScoped<IPedidoMap, PedidoMaper>();
 ClienteService.Mapper = new ClienteMaper();
 
 var app = builder.Build();

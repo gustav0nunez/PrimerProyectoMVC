@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Persistencia
 {
-    internal class PedidoMaper
+    public class PedidoMaper : IPedidoMap
     {
+        static string strcon = @"Server=.\SQLEXPRESS01;Initial Catalog=PracticosBD2;Integrated Security=true;TrustServerCertificate=true;Connect Timeout=60";
+
         public void Guardar(Pedido p)
         {
             using (SqlConnection conn = new SqlConnection(strcon))
@@ -26,6 +28,12 @@ namespace Persistencia
                 conn.Open(); 
                 cmd.ExecuteNonQuery(); 
             }
+        }
+
+        public List<Pedido> ObtenerTodos()
+        {
+            // Implementación necesaria para cumplir con la interfaz
+            throw new NotImplementedException();
         }
     }
 }
