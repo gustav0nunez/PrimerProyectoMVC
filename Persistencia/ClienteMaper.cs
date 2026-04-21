@@ -9,8 +9,6 @@ namespace Persistencia
     {
         static string strcon = @"Server=.\SQLEXPRESS01;Initial Catalog=PracticosBD2;Integrated Security=true;TrustServerCertificate=true;Connect Timeout=60";
 
-
-
         private Cliente MapearCliente(SqlDataReader reader)
         {
             return new Cliente
@@ -22,7 +20,6 @@ namespace Persistencia
                 FechaNacimiento = Convert.ToDateTime(reader["fecha_nacimiento"])
             };
         }
-
         public void Modificar(Cliente c)
         {
 
@@ -70,7 +67,6 @@ namespace Persistencia
                 }
             }
         }
-
         public void Eliminar(int id)
         {
             //1- CONEXION: SQLCONNECTION
@@ -112,7 +108,6 @@ namespace Persistencia
                 }
             }
         }
-
         public Cliente ObtenerPorId(int id)
         {
            
@@ -183,8 +178,6 @@ namespace Persistencia
 
             return lista;
         }
-
-
         public void Guardar(Cliente c)
         {
        
@@ -241,10 +234,6 @@ namespace Persistencia
                 }
             }
         }
-
-       
-            
-
         public Cliente ObtenerClientePorMail(string mail)
         {
             SqlConnection conn = new SqlConnection(strcon);
