@@ -27,7 +27,7 @@ namespace Dominio
             [Required(ErrorMessage = "El estado es obligatorio")]
             public string Estado { get; set; }
 
-        public List<DetallePedido> DetallesPedido { get; set; } = new DetallePedido(); 
+        public List<DetallePedido> DetallesPedido { get; set; } = new List<DetallePedido>(); 
     }
     }
 
