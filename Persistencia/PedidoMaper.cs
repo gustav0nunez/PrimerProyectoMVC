@@ -15,7 +15,7 @@ namespace Persistencia
         {
             using (SqlConnection conn = new SqlConnection(strcon))
             {
-                string sql = "INSERT INTO Pedido (id_cliente, fecha_pedido, total, estado) VALUES (@idC, @fecha, @total, @estado)";
+                string sql = "INSERT INTO Pedido (cliente_id, fecha_hora, total, estado) VALUES (@idC, @fecha, @total, @estado)";
                 SqlCommand cmd = new SqlCommand(sql, conn);
 
                 cmd.Parameters.AddWithValue("@idC", p.IdCliente);
@@ -34,7 +34,7 @@ namespace Persistencia
             List<Pedido> lista = new List<Pedido>();
             using (SqlConnection conn = new SqlConnection(strcon))
             {
-                string sql = "SELECT id_pedido, id_cliente, fecha_pedido, total, estado FROM Pedido";
+                string sql = "SELECT id_pedido, cliente_id, fecha_hora, total, estado FROM Pedido";
                 SqlCommand cmd = new SqlCommand(sql, conn);
 
                 conn.Open();
@@ -55,7 +55,7 @@ namespace Persistencia
             Pedido p = null;
             using (SqlConnection conn = new SqlConnection(strcon))
             {
-                string sql = "SELECT id_pedido, id_cliente, fecha_pedido, total, estado FROM Pedido WHERE id_pedido = @id";
+                string sql = "SELECT id_pedido, cliente_id, fecha_hora, total, estado FROM Pedido WHERE id_pedido = @id";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -91,8 +91,8 @@ namespace Persistencia
             return new Pedido
             {
                 Id = (int)reader["id_pedido"],
-                IdCliente = (int)reader["id_cliente"],
-                Fecha = Convert.ToDateTime(reader["fecha_pedido"]),
+                IdCliente = (int)reader["cliente_id"],
+                Fecha = Convert.ToDateTime(reader["fecha_hora"]),
                 Total = Convert.ToDecimal(reader["total"]),
                 Estado = reader["estado"].ToString()
             };

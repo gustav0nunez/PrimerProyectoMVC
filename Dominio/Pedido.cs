@@ -12,10 +12,11 @@ namespace Dominio
         
             public int Id { get; set; }
 
-            [Required(ErrorMessage = "Debes seleccionar un cliente")]
-            public int IdCliente { get; set; }
+        [Required(ErrorMessage = "Debes seleccionar un cliente")]
+        [Range(1, int.MaxValue, ErrorMessage = "Por favor, seleccione un cliente de la lista")]
+        public int IdCliente { get; set; }
 
-            [Required(ErrorMessage = "La fecha es obligatoria")]
+        [Required(ErrorMessage = "La fecha es obligatoria")]
             [DataType(DataType.Date)]
             public DateTime Fecha { get; set; }
 
@@ -24,7 +25,9 @@ namespace Dominio
             public decimal Total { get; set; }
 
             [Required(ErrorMessage = "El estado es obligatorio")]
-            public string Estado { get; set; } 
-        }
+            public string Estado { get; set; }
+
+        public List<DetallePedido> DetallesPedido { get; set; } = new DetallePedido(); 
+    }
     }
 

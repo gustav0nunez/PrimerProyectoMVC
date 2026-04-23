@@ -7,9 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddScoped<IClienteMap, ClienteMaper>();
-builder.Services.AddScoped<IPedidoMap, PedidoMaper>();
+
 ClienteService.Mapper = new ClienteMaper();
+
+PedidoService.Mapper = new Persistencia.PedidoMaper();
 
 var app = builder.Build();
 

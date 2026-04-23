@@ -20,12 +20,19 @@ namespace Ctc.Sitio.Controllers
             
             List<Cliente>clientes = ClienteService.Instancia.TraerTodos();
             ViewBag.ListadoClientes = clientes;
-            return View();  
+            return View(); 
         }
 
-       
+
         [HttpPost]
-        public IActionResult Crear(Pedido p)
+
+        public IActionResult AgregarItem (Pedido pedido)
+        {
+            List<Cliente> clientes = ClienteService.Instancia.TraerTodos();
+            ViewBag.DetallesPedido.add(new DetallePedido());
+            return View("Crear", pedido);
+        }
+      /*  public IActionResult Crear(Pedido p)
         {
             
             if (!ModelState.IsValid)
@@ -37,7 +44,7 @@ namespace Ctc.Sitio.Controllers
 
             try
             {
-            
+                
                 PedidoService.Instancia.GuardarPedido(p);
                 return RedirectToAction("Index");
             }
@@ -45,16 +52,24 @@ namespace Ctc.Sitio.Controllers
             {
                 
                 ModelState.AddModelError(string.Empty, ex.Message);
-
-                
                 ViewBag.Clientes = ClienteService.Instancia.TraerTodos();
                 return View(p);
             }
         }
-    
-    
-        
+        */
+
+        public IActionResult QuitarItem(Pedido pedido, int indice)
+        {
+            if (indice >= 0 && indice < pedido.DetallesPedido.Count)
+            {
+                pedido.DetallesPedido.RemoveAt(indice);
+            }
+            return View("Crear", pedido);
+        }
+
     }
+
+   
 
   
 }
