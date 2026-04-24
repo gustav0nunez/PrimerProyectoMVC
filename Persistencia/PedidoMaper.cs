@@ -13,22 +13,63 @@ namespace Persistencia
 
         public void Guardar(Pedido p)
         {
+            
             using (SqlConnection conn = new SqlConnection(strcon))
             {
-                string sql = "INSERT INTO Pedido (cliente_id, fecha_hora, total, estado) VALUES (@idC, @fecha, @total, @estado)";
-                SqlCommand cmd = new SqlCommand(sql, conn);
-
-                cmd.Parameters.AddWithValue("@idC", p.IdCliente);
-                cmd.Parameters.AddWithValue("@fecha", p.Fecha);
-                cmd.Parameters.AddWithValue("@total", p.Total);
-                cmd.Parameters.AddWithValue("@estado", p.Estado);
-
                 conn.Open();
-                cmd.ExecuteNonQuery();
-            }
+
+                
+               using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        
+                        string sqlPedido = @"INSERT INTO Pedido (cliente_id, fecha_hora, total, estado) 
+                                     VALUES (@idC, @fecha, @total, @estado);
+                                     SELECT SCOPE_IDENTITY();";
+
+                        int idGenerado;
+
+                        
+                        using (SqlCommand cmdP = new SqlCommand(sqlPedido, conn, trans))
+                        {
+                            cmdP.Parameters.AddWithValue("@idC", p.IdCliente);
+                            cmdP.Parameters.AddWithValue("@fecha", p.Fecha);
+                            cmdP.Parameters.AddWithValue("@total", p.Total);
+                            cmdP.Parameters.AddWithValue("@estado", "Pendiente");
+
+                            idGenerado = Convert.ToInt32(cmdP.ExecuteScalar());
+                        } 
+
+                        
+                        foreach (var det in p.DetallesPedido)
+                        {
+                            string sqlDet = "INSERT INTO Detalle_Pedido (pedido_id, producto_id, cantidad) VALUES (@idP, @prodId, @cant)";
+
+                            
+                            using (SqlCommand cmdD = new SqlCommand(sqlDet, conn, trans))
+                            {
+                                cmdD.Parameters.AddWithValue("@idP", idGenerado);
+                                cmdD.Parameters.AddWithValue("@prodId", det.ProductoId);
+                                cmdD.Parameters.AddWithValue("@cant", det.Cantidad);
+
+                                cmdD.ExecuteNonQuery();
+                            } 
+                        }
+
+                        
+                        trans.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback(); 
+                        throw new Exception("Error al guardar el pedido y sus detalles: " + ex.Message);
+                    }
+                } 
+            } 
         }
 
-        
+
         public List<Pedido> ObtenerTodos()
         {
             List<Pedido> lista = new List<Pedido>();
@@ -76,7 +117,7 @@ namespace Persistencia
         {
             using (SqlConnection conn = new SqlConnection(strcon))
             {
-                string sql = "DELETE FROM Pedido WHERE id_pedido = @id";
+                string sql = "DELETE FROM Detalle_pedido WHERE pedido_id = @id; DELETE FROM Pedido WHERE id_pedido = @id";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@id", id);
 

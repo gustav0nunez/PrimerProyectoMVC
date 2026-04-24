@@ -10,7 +10,9 @@ builder.Services.AddControllersWithViews();
 
 ClienteService.Mapper = new ClienteMaper();
 
-PedidoService.Mapper = new Persistencia.PedidoMaper();
+PedidoService.Mapper = new PedidoMaper();
+
+ProductoService.Mapper = new ProductoMaper(); 
 
 var app = builder.Build();
 
